@@ -1,0 +1,4 @@
+psql:
+  host: "localhost"
+  password: "password"
+  port: 5432

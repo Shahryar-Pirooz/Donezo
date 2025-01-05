@@ -1,11 +1,19 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
+
+const (
+	ERROR_ID_NIL = "ID cannot be a Nil UUID"
+)
 
 type ProjectID = uuid.UUID
 
 type Project struct {
-	UUID     ProjectID
+	UUID   ProjectID
 	Name   string
 	Parent *Project
 }
@@ -14,9 +22,9 @@ type ProjectFilter struct {
 	Name string
 }
 
-func (p *Project) IsValid() bool {
-	if p.UUID ==uuid.Nil {
-		return false
+func (p *Project) IsValid() error {
+	if p.UUID == uuid.Nil {
+		return errors.New(ERROR_ID_NIL)
 	}
-	return true
+	return uuid.Validate(p.UUID.String())
 }

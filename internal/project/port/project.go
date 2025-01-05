@@ -1,5 +1,3 @@
 package port
 
-type Project interface{
-
-}
+type Repo interface{}

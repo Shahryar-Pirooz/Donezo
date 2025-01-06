@@ -19,45 +19,45 @@ func NewService(repo port.Repo) port.Service {
 	}
 }
 
-func (s *service) CreateProject(ctx context.Context, record projectDomain.Project) (projectDomain.ProjectID, error) {
-	if err:= record.IsValid() ; err!=nil{
-		return uuid.Nil , fmt.Errorf("%w" , err)
+func (s *service) Create(ctx context.Context, record projectDomain.Project) (projectDomain.ProjectID, error) {
+	if err := record.IsValid(); err != nil {
+		return uuid.Nil, fmt.Errorf("invalid project: %w", err)
 	}
-	projectID , err := s.repo.Create(ctx,record)
-	return projectID , err
+	return s.repo.Create(ctx, record)
 }
 
-func (s *service) UpdateProject(ctx context.Context, UUID projectDomain.ProjectID, newRecord projectDomain.Project) error {
-	if err:= uuid.Validate(UUID.String()); err!=nil{
-		return fmt.Errorf("%w" , err)
+func (s *service) Update(ctx context.Context, UUID projectDomain.ProjectID, newRecord projectDomain.Project) error {
+	if err := uuid.Validate(UUID.String()); err != nil {
+		return fmt.Errorf("invalid UUID: %w", err)
 	}
-	if err := s.repo.Update(ctx , UUID , newRecord); err!=nil {
-		return fmt.Errorf("%w" , err)
+
+	if err := newRecord.IsValid(); err != nil {
+		return fmt.Errorf("invalid project: %w", err)
 	}
-	return nil
+
+	return s.repo.Update(ctx, UUID, newRecord)
 }
 
-func (s *service) GetProject(ctx context.Context, pageIndex uint, pageSize uint, filter *projectDomain.ProjectFilter) ([]projectDomain.Project, error) {
-	var projects []projectDomain.Project
-	var err error
-	if filter != nil{
-		projects , err = s.repo.FilterProject(ctx , pageIndex , pageSize , *filter)
-	}else {
-		projects , err = s.repo.GetAllProjects(ctx,pageIndex , pageSize)
+func (s *service) List(ctx context.Context, pageIndex uint, pageSize uint, filter *projectDomain.ProjectFilter) ([]projectDomain.Project, error) {
+	if filter != nil {
+		projects, err := s.repo.Filter(ctx, pageIndex, pageSize, *filter)
+		if err != nil {
+			return nil, fmt.Errorf("error filtering projects: %w", err)
+		}
+		return projects, nil
 	}
-	if err!=nil{ 
-		return projects , fmt.Errorf("%w" , err)
+
+	projects, err := s.repo.List(ctx, pageIndex, pageSize)
+	if err != nil {
+		return nil, fmt.Errorf("error getting projects: %w", err)
 	}
-	return projects , err 
+	return projects, nil
 }
 
-func (s *service) DeleteProject(ctx context.Context, UUID projectDomain.ProjectID) error {
- if err := uuid.Validate(UUID.String()); err!=nil{
-	 return fmt.Errorf("%w" , err)
- }
- if err := s.repo.Delete(ctx , UUID); err!=nil{
- 
-	 return fmt.Errorf("%w" , err)
- }
- return nil
+func (s *service) Delete(ctx context.Context, UUID projectDomain.ProjectID) error {
+	if err := uuid.Validate(UUID.String()); err != nil {
+		return fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	return s.repo.Delete(ctx, UUID)
 }

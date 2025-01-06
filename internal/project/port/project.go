@@ -5,10 +5,10 @@ import (
 	"donezo/internal/project/domain"
 )
 
-type Repo interface{
-	Create(ctx context.Context, record domain.Project)(domain.ProjectID , error)
-	Update(ctx context.Context, UUID domain.ProjectID , newRecord domain.Project) error
-	GetAllProjects(ctx context.Context , pageIndex , pageSize uint)([]domain.Project , error)
-	FilterProject(ctx context.Context , pageIndex , pageSize uint , filter domain.ProjectFilter)([]domain.Project , error)
-	Delete(ctx context.Context , UUID domain.ProjectID) error
+type Repo interface {
+	Create(ctx context.Context, project domain.Project) (domain.ProjectID, error)
+	Update(ctx context.Context, id domain.ProjectID, project domain.Project) error
+	List(ctx context.Context, page, limit uint) ([]domain.Project, error)
+	Filter(ctx context.Context, page, limit uint, filter domain.ProjectFilter) ([]domain.Project, error)
+	Delete(ctx context.Context, id domain.ProjectID) error
 }

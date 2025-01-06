@@ -5,10 +5,10 @@ import (
 	"donezo/internal/task/domain"
 )
 
-type Repo interface{
-	Create(ctx context.Context, record domain.Task)(domain.TaskID , error)
-	Update(ctx context.Context, UUID domain.TaskID , newRecord domain.Task) error
-	GetAllTasks(ctx context.Context , pageIndex , pageSize uint)([]domain.Task , error)
-	FilterTask(ctx context.Context , pageIndex , pageSize uint , filter domain.TaskFilter)([]domain.Task , error)
-	Delete(ctx context.Context , UUID domain.TaskID) error
-}		
+type Repo interface {
+	Create(ctx context.Context, task domain.Task) (domain.TaskID, error)
+	Update(ctx context.Context, id domain.TaskID, task domain.Task) error
+	List(ctx context.Context, page, limit uint) ([]domain.Task, error)
+	Filter(ctx context.Context, page, limit uint, filter domain.TaskFilter) ([]domain.Task, error)
+	Delete(ctx context.Context, id domain.TaskID) error
+}

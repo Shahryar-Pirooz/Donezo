@@ -7,12 +7,12 @@ import (
 )
 
 type Service interface {
-	CreateNewTask(ctx context.Context , record taskDomain.Task) (taskDomain.TaskID , error)
-	UpdateTask(ctx context.Context , UUID taskDomain.TaskID , newRecord taskDomain.Task) error
-	DoneTask(ctx context.Context , UUID taskDomain.TaskID) error
-	GetTitleByID(ctx context.Context ,UUID taskDomain.TaskID) (string , error)
-	GetTasksByPriority (ctx context.Context , priority taskDomain.PriorityType) ([]taskDomain.Task , error)
-	GetParent(ctx context.Context , UUID taskDomain.TaskID) (projectDomain.Project , error)
-	GetTask(ctx context.Context, pageIndex , pageSize uint , filter *taskDomain.TaskFilter) ([]taskDomain.Task , error)
-	DeleteTask(ctx context.Context , UUID taskDomain.Task) error
+	Create(ctx context.Context, task taskDomain.Task) (taskDomain.TaskID, error)
+	Update(ctx context.Context, id taskDomain.TaskID, task taskDomain.Task) error
+	MarkDone(ctx context.Context, id taskDomain.TaskID) error
+	GetTitle(ctx context.Context, id taskDomain.TaskID) (string, error)
+	ListByPriority(ctx context.Context, priority taskDomain.PriorityType) ([]taskDomain.Task, error)
+	GetProject(ctx context.Context, id taskDomain.TaskID) (projectDomain.Project, error)
+	List(ctx context.Context, page, size uint, filter *taskDomain.TaskFilter) ([]taskDomain.Task, error)
+	Delete(ctx context.Context, task taskDomain.Task) error
 }

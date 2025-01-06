@@ -9,16 +9,21 @@ import (
 	"github.com/google/uuid"
 )
 
+// Task related errors
 var (
-	ERROR_ID_VALID         = errors.New("ID is not valid")
-	ERROR_ID_NIL           = errors.New("ID cannot be a Nil UUID")
-	ERROR_TITLE_NIL        = errors.New("title is required")
-	ERROR_PRIORITY_UNKNOWN = errors.New("priority cannot be unknown")
+	ErrInvalidID       = errors.New("ID is not valid")
+	ErrNilID           = errors.New("ID cannot be a Nil UUID")
+	ErrEmptyTitle      = errors.New("title is required")
+	ErrUnknownPriority = errors.New("priority cannot be unknown")
 )
 
+// TaskID represents the unique identifier for a task
 type TaskID = uuid.UUID
+
+// PriorityType represents the priority level of a task
 type PriorityType uint8
 
+// Priority levels
 const (
 	PriorityTypeUnknown PriorityType = iota
 	PriorityTypeLow
@@ -26,35 +31,46 @@ const (
 	PriorityTypeHigh
 )
 
+// Task represents a work item that needs to be completed
 type Task struct {
-	UUID     TaskID
-	Title    string
-	Describe string
-	Parent   domain.ProjectID
-	Done     bool
-	Priority PriorityType
-	CreateAt time.Time
-	DeleteAt time.Time
+	ID          TaskID // Renamed from UUID for clarity
+	Title       string
+	Description string           // Renamed from Describe for clarity
+	ProjectID   domain.ProjectID // Renamed from Parent for clarity
+	Done        bool
+	Priority    PriorityType
+	CreatedAt   time.Time // Fixed typo in field name
+	DeletedAt   time.Time // Fixed typo in field name
 }
 
+// TaskFilter contains criteria for filtering tasks
 type TaskFilter struct {
-	Title  string
-	Parent domain.ProjectID
-	Done   bool
+	Title     string
+	ProjectID domain.ProjectID // Renamed from Parent for consistency
+	Done      bool
 }
 
+// Valid checks if the task has all required fields properly set
 func (t *Task) Valid() error {
-	if err := uuid.Validate(t.UUID.String()); err != nil {
-		return ERROR_ID_NIL
+	// Check for nil UUID
+	if t.ID == uuid.Nil {
+		return ErrNilID
 	}
-	if err := uuid.Validate(t.UUID.String()); err != nil {
-		return fmt.Errorf("%w : %w", ERROR_ID_VALID, err)
+
+	// Validate UUID format
+	if err := uuid.Validate(t.ID.String()); err != nil {
+		return fmt.Errorf("%w: %v", ErrInvalidID, err)
 	}
+
+	// Validate title
 	if t.Title == "" {
-		return ERROR_TITLE_NIL
+		return ErrEmptyTitle
 	}
+
+	// Validate priority
 	if t.Priority == PriorityTypeUnknown {
-		return ERROR_PRIORITY_UNKNOWN
+		return ErrUnknownPriority
 	}
+
 	return nil
 }

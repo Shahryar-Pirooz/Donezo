@@ -17,27 +17,27 @@ func NewService(repo taskPort.Repo) taskPort.Service {
 	}
 }
 
-func (s *service) CreateNewTask(ctx context.Context, record taskDomain.Task) (taskDomain.TaskID, error) {
+func (s *service) Create(ctx context.Context, record taskDomain.Task) (taskDomain.TaskID, error) {
 	panic("")
 }
-func (s *service) UpdateTask(ctx context.Context, UUID taskDomain.TaskID, newRecord taskDomain.Task) error {
+func (s *service) Update(ctx context.Context, id taskDomain.TaskID, newRecord taskDomain.Task) error {
 	panic("")
 }
-func (s *service) DoneTask(ctx context.Context, UUID taskDomain.TaskID) error {
+func (s *service) MarkDone(ctx context.Context, id taskDomain.TaskID) error {
 	panic("")
 }
-func (s *service) GetTitleByID(ctx context.Context, UUID taskDomain.TaskID) (string, error) {
+func (s *service) GetTitle(ctx context.Context, id taskDomain.TaskID) (string, error) {
 	panic("")
 }
-func (s *service) GetTasksByPriority(ctx context.Context, priority taskDomain.PriorityType) ([]taskDomain.Task, error) {
+func (s *service) ListByPriority(ctx context.Context, priority taskDomain.PriorityType) ([]taskDomain.Task, error) {
 	panic("")
 }
-func (s *service) GetParent(ctx context.Context, UUID taskDomain.TaskID) (projectDomain.Project, error) {
+func (s *service) GetProject(ctx context.Context, id taskDomain.TaskID) (projectDomain.Project, error) {
 	panic("")
 }
-func (s *service) GetTask(ctx context.Context, pageIndex, pageSize uint, filter *taskDomain.TaskFilter) ([]taskDomain.Task, error) {
+func (s *service) List(ctx context.Context, pageIndex, pageSize uint, filter *taskDomain.TaskFilter) ([]taskDomain.Task, error) {
 	panic("")
 }
-func (s *service) DeleteTask(ctx context.Context, UUID taskDomain.Task) error {
+func (s *service) Delete(ctx context.Context, id taskDomain.Task) error {
 	panic("")
 }

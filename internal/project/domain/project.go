@@ -28,7 +28,7 @@ type ProjectFilter struct {
 	Name string
 }
 
-func (p *Project) IsValid() error {
+func (p *Project) Validate() error {
 	if p.ID == uuid.Nil {
 		return ErrIDNil
 	}

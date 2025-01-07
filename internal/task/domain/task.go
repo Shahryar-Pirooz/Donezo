@@ -47,11 +47,12 @@ type Task struct {
 type TaskFilter struct {
 	Title     string
 	ProjectID domain.ProjectID // Renamed from Parent for consistency
+	Priority  PriorityType
 	Done      bool
 }
 
 // Valid checks if the task has all required fields properly set
-func (t *Task) Valid() error {
+func (t *Task) Validate() error {
 	// Check for nil UUID
 	if t.ID == uuid.Nil {
 		return ErrNilID

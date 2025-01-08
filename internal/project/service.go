@@ -24,11 +24,11 @@ func (s *service) Create(ctx context.Context, record projectDomain.Project) (pro
 	if err := record.Validate(); err != nil {
 		return uuid.Nil, fmt.Errorf("invalid project: %w", err)
 	}
-	newID , err := s.repo.Create(ctx, record)
-	if err!=nil{
+	newID, err := s.repo.Create(ctx, record)
+	if err != nil {
 		return newID, err
 	}
-	return newID , nil
+	return newID, nil
 }
 
 func (s *service) Update(ctx context.Context, UUID projectDomain.ProjectID, newRecord projectDomain.Project) error {
@@ -39,8 +39,8 @@ func (s *service) Update(ctx context.Context, UUID projectDomain.ProjectID, newR
 	if err := newRecord.Validate(); err != nil {
 		return fmt.Errorf("invalid project: %w", err)
 	}
-	if err := s.repo.Update(ctx, UUID, newRecord); err!=nil{
-		return fmt.Errorf("something went wrong in update: %w" , err)
+	if err := s.repo.Update(ctx, UUID, newRecord); err != nil {
+		return fmt.Errorf("something went wrong in update: %w", err)
 	}
 	return nil
 }
@@ -56,7 +56,7 @@ func (s *service) List(ctx context.Context, page uint, size uint, filter *projec
 		return []projectDomain.Project{}, errors.New("page size cannot exceed 10")
 	}
 	if filter != nil {
-		projects, err := s.repo.Filter(ctx, page, size, *filter)
+		projects, err := s.repo.Filter(ctx, page, size, filter)
 		if err != nil {
 			return nil, fmt.Errorf("error filtering projects: %w", err)
 		}
@@ -74,8 +74,8 @@ func (s *service) Delete(ctx context.Context, UUID projectDomain.ProjectID) erro
 	if err := uuid.Validate(UUID.String()); err != nil {
 		return fmt.Errorf("invalid UUID: %w", err)
 	}
-	if err := s.repo.Delete(ctx, UUID);err!=nil{
-		return fmt.Errorf("something went wrong in delete: %w" , err)
+	if err := s.repo.Delete(ctx, UUID); err != nil {
+		return fmt.Errorf("something went wrong in delete: %w", err)
 	}
 	return nil
 }

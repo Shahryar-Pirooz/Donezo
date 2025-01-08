@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// Task related errors
 var (
 	ErrInvalidID       = errors.New("ID is not valid")
 	ErrNilID           = errors.New("ID cannot be a Nil UUID")
@@ -17,13 +16,10 @@ var (
 	ErrUnknownPriority = errors.New("priority cannot be unknown")
 )
 
-// TaskID represents the unique identifier for a task
 type TaskID = uuid.UUID
 
-// PriorityType represents the priority level of a task
 type PriorityType uint8
 
-// Priority levels
 const (
 	PriorityTypeUnknown PriorityType = iota
 	PriorityTypeLow
@@ -31,44 +27,38 @@ const (
 	PriorityTypeHigh
 )
 
-// Task represents a work item that needs to be completed
 type Task struct {
-	ID          TaskID // Renamed from UUID for clarity
+	ID          TaskID
 	Title       string
-	Description string           // Renamed from Describe for clarity
-	ProjectID   domain.ProjectID // Renamed from Parent for clarity
+	Description string
+	ProjectID   domain.ProjectID
 	Done        bool
 	Priority    PriorityType
-	CreatedAt   time.Time // Fixed typo in field name
-	DeletedAt   time.Time // Fixed typo in field name
+	CreatedAt   time.Time
+	DeletedAt   time.Time
 }
 
-// TaskFilter contains criteria for filtering tasks
 type TaskFilter struct {
 	Title     string
-	ProjectID domain.ProjectID // Renamed from Parent for consistency
+	ProjectID domain.ProjectID
 	Priority  PriorityType
 	Done      bool
 }
 
-// Valid checks if the task has all required fields properly set
 func (t *Task) Validate() error {
-	// Check for nil UUID
+
 	if t.ID == uuid.Nil {
 		return ErrNilID
 	}
 
-	// Validate UUID format
 	if err := uuid.Validate(t.ID.String()); err != nil {
 		return fmt.Errorf("%w: %v", ErrInvalidID, err)
 	}
 
-	// Validate title
 	if t.Title == "" {
 		return ErrEmptyTitle
 	}
 
-	// Validate priority
 	if t.Priority == PriorityTypeUnknown {
 		return ErrUnknownPriority
 	}

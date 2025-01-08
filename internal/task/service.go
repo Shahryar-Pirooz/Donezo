@@ -90,7 +90,7 @@ func (s *service) ListByPriority(ctx context.Context, page, size uint, priority 
 		return nil, err
 	}
 
-	filter := taskDomain.TaskFilter{Priority: priority}
+	filter := &taskDomain.TaskFilter{Priority: priority}
 	tasks, err := s.repo.Filter(ctx, page, size, filter)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list tasks by priority: %w", err)
@@ -106,7 +106,7 @@ func (s *service) GetDone(ctx context.Context, page, size uint) ([]taskDomain.Ta
 		return nil, err
 	}
 
-	filter := taskDomain.TaskFilter{Done: true}
+	filter := &taskDomain.TaskFilter{Done: true}
 	tasks, err := s.repo.Filter(ctx, page, size, filter)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get done tasks: %w", err)
@@ -145,7 +145,7 @@ func (s *service) List(ctx context.Context, page, size uint, filter *taskDomain.
 	if filter == nil {
 		tasks, err = s.repo.List(ctx, page, size)
 	} else {
-		tasks, err = s.repo.Filter(ctx, page, size, *filter)
+		tasks, err = s.repo.Filter(ctx, page, size, filter)
 	}
 
 	if err != nil {

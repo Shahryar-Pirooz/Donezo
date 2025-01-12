@@ -79,7 +79,7 @@ func (a *app) setDB() error {
 	if err != nil {
 		return err
 	}
-	a.db(db)
+	a.db = db
 	return nil
 }
 func (a *app) Config() config.Config {

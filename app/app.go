@@ -12,6 +12,7 @@ import (
 	userPort "donezo/internal/user/port"
 	"donezo/pkg/adapter/storage"
 	appContext "donezo/pkg/context"
+	"donezo/pkg/postgres"
 
 	"gorm.io/gorm"
 )
@@ -66,6 +67,39 @@ func (a *app) userServiceWithDB(db *gorm.DB) userPort.Service {
 func (a *app) DB() *gorm.DB {
 	return a.db
 }
+func (a *app) setDB() error {
+	db, err := postgres.NewConnection(postgres.DBConnectOption{
+		User:     a.cnf.DB.User,
+		Password: a.cnf.DB.Password,
+		Host:     a.cnf.DB.Host,
+		Port:     a.cnf.DB.Port,
+		DBName:   a.cnf.DB.DBName,
+		SSLMode:  a.cnf.DB.SSLMode,
+	})
+	if err != nil {
+		return err
+	}
+	a.db(db)
+	return nil
+}
 func (a *app) Config() config.Config {
 	return a.cnf
+}
+
+func NewApp(cnf config.Config) (App, error) {
+	a := &app{
+		cnf: cnf,
+	}
+	if err := a.setDB(); err != nil {
+		return nil, err
+	}
+	return a, nil
+}
+
+func NewMustApp(cnf config.Config) App {
+	app, err := NewApp(cnf)
+	if err != nil {
+		panic(err)
+	}
+	return app
 }

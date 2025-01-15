@@ -1,6 +1,8 @@
 package main
 
 import (
+	"donezo/api/http"
+	"donezo/app"
 	"donezo/config"
 	"flag"
 	"log"
@@ -10,7 +12,9 @@ import (
 var pathConfig string
 
 func main() {
-
+	cnf := loadConfig()
+	app := app.NewMustApp(cnf)
+	http.Run(cnf, &app)
 }
 
 func loadConfig() config.Config {

@@ -1,7 +1,13 @@
 package config
 
 type Config struct {
-	DB Postgres `mapstructure:"psql"`
+	DB     Postgres `mapstructure:"psql"`
+	Server Server   `mapstructure:"server"`
+}
+
+type Server struct {
+	Host string `mapstructure:"host"`
+	Port string `mapstructure:"port"`
 }
 
 type Postgres struct {

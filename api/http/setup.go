@@ -27,10 +27,16 @@ func registerTaskRouts(router fiber.Router, _ *app.App) {
 
 }
 
-func registerProjectRouts(router fiber.Router, app *app.App) {
-	panic("unimplemented")
+func registerProjectRouts(router fiber.Router, _ *app.App) {
+	taskGroup := router.Group("/project")
+	taskGroup.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.JSON(fiber.Map{"message": "ok"})
+	})
 }
 
-func registerGlobalRouts(api fiber.Router, app *app.App) {
-	panic("unimplemented")
+func registerGlobalRouts(router fiber.Router, _ *app.App) {
+	taskGroup := router.Group("/")
+	taskGroup.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.JSON(fiber.Map{"message": "ok"})
+	})
 }
